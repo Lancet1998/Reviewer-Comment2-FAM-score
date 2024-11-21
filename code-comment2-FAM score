@@ -1,0 +1,20 @@
+##Below is the code for the key steps：
+
+##loading merged scRNA-seq data
+load("E:\\GHR20030051-5-5scRNAseq\\pbmc_pos_ok.Rdata")
+
+## First, assign the FAM gene set to genelistFAM
+listFAM <- read_excel("D:\\table\\MSigDB_FAM.xlsx")
+FAM <- listFAM$SYMBOL
+gene_listFAM <- list(c(FAM))
+
+## Load the Seurat package and directly call AddModuleScore
+pbmc <- AddModuleScore(pbmc, features = gene_listFAM, name = “FAM_scores”)
+
+## Plot UMAP graph (Omit)
+FAMUMAP<- FetchData(pbmc,vars = c("UMAP_1","UMAP_2","gene_listFAM"))
+a <- ggplot(FAMUMAP,aes(x = UMAP_1,y =UMAP_2,colour = gene_listFAM))+
+  geom_point(size = 0.5)+scale_color_gradientn(values = seq(0,1,0.5),
+                                             colours = c("#000001","#360066","#A41967","#F7704E","#FEEEB1"),
+                                             limits = c(-0.1,0.22))
+
